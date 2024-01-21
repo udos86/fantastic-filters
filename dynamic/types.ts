@@ -30,3 +30,9 @@ export type PathFilter<Type extends Record<string, unknown>, MapType = unknown, 
     map?: (value: TypeOfPath<Type, [Key]>) => MapType;
   };
 }[Extract<keyof Type, string>];
+
+export type ExplicitPathFilter<Type extends Record<string, unknown>, Path extends PathOf<Type> = PathOf<Type>, MapType = unknown> = {
+  title: string;
+  path: Path
+  map?: (value: TypeOfPath<Type, Path>) => MapType;
+}
