@@ -30,12 +30,12 @@ export type PathOf<Type extends Record<string, unknown>, Key extends Extract<key
       : [..._Acc, Key]
   : never;
 
-export type TypeOfPath<Type extends Record<string, unknown>, Path extends string[], _Acc extends number[] = []> =
-  Type[Path[_Acc['length']]] extends Record<string, unknown>
-  ? TypeOfPath<Type[Path[_Acc['length']]], Path, [..._Acc, _Acc['length']]>
-  : Type[Path[_Acc['length']]] extends Array<unknown> | bigint | boolean | number | null | string | symbol | undefined
-    ? Type[Path[_Acc['length']]] 
-    : never;
+export type TypeOfPath<Type extends Record<string, unknown>, Path extends string[], _Depth extends number[] = [], _Key extends Path[_Depth['length']] = Path[_Depth['length']]> =
+  Type[_Key] extends Record<string, unknown>
+    ? TypeOfPath<Type[_Key], Path, [..._Depth, _Depth['length']]>
+    : Type[_Key] extends Array<unknown> | bigint | boolean | number | null | string | symbol | undefined
+      ? Type[_Key] 
+      : never;
 
 export type PathFilter<Type extends Record<string, unknown>, MapType = unknown, _Acc extends string[] = []> = {
   [Key in Extract<keyof Type, string>]-?: Type[Key] extends Record<string, unknown>
