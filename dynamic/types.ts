@@ -23,10 +23,11 @@ export type PathOf<Type extends Record<string, unknown>, _Acc extends string[] =
     : [..._Acc, Key];
 }[Extract<keyof Type, string>];
 */
-export type PathOf<Type extends Record<string, unknown>, _Acc extends string[] = [], Key extends Extract<keyof Type, string> = Extract<keyof Type, string>> = Key extends keyof Type
-  ? Type[Key] extends Record<string, unknown>
-    ? PathOf<Type[Key], [..._Acc, Key]>
-    : [..._Acc, Key]
+export type PathOf<Type extends Record<string, unknown>, Key extends Extract<keyof Type, string> = Extract<keyof Type, string>, _Acc extends string[] = []> = 
+  Key extends keyof Type
+    ? Type[Key] extends Record<string, unknown>
+      ? PathOf<Type[Key], Extract<keyof Type[Key], string>, [..._Acc, Key]>
+      : [..._Acc, Key]
   : never;
 
 export type TypeOfPath<Type extends Record<string, unknown>, Path extends string[], _Acc extends number[] = []> =
