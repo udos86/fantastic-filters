@@ -36,13 +36,25 @@ export type TypeOfPath<Type extends Record<string, unknown>, Path extends string
     : Type[_Key] extends Array<unknown> | bigint | boolean | number | null | string | symbol | undefined
       ? Type[_Key] 
       : never;
-
+/*
 export type PathFilter<Type extends Record<string, unknown>, MapType = unknown, _Acc extends string[] = []> = {
   [Key in Extract<keyof Type, string>]-?: Type[Key] extends Record<string, unknown>
   ? PathFilter<Type[Key], MapType, [..._Acc, Key]>
   : {
     title: string;
     path: [..._Acc, Key];
+    map?: (value: TypeOfPath<Type, [Key]>) => MapType;
+  };
+}[Extract<keyof Type, string>];
+*/
+export type PathFilter<Type extends Record<string, unknown>, MapType = unknown, Depth = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7, _PathAcc extends string[] = []> = {
+  [Key in Extract<keyof Type, string>]-?: Type[Key] extends Record<string, unknown>
+  ? _PathAcc['length'] extends Depth 
+    ? PathFilter<Type[Key], MapType, Depth, [..._PathAcc, Key]> 
+    : never
+  : {
+    title: string;
+    path: [..._PathAcc, Key];
     map?: (value: TypeOfPath<Type, [Key]>) => MapType;
   };
 }[Extract<keyof Type, string>];
